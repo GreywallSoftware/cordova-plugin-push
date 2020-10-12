@@ -499,6 +499,16 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
       }
     }
   }
+  
+  @Override
+  public void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    final Bundle data = intent.getExtras();
+    if (data != null && data.containsKey("google.message_id")) {
+      data.putBoolean("tap", true);
+      PushPlugin.sendExtras(data);
+    }
+  }
 
   /*
    * Retrives badge count from SharedPreferences

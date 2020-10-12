@@ -282,6 +282,19 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
               String newKey = normalizeKey(key, messageKey, titleKey, newExtras);
               Log.d(LOG_TAG, "replace key " + key + " with " + newKey);
               replaceKey(context, key, newKey, extras, newExtras);
+            } else if (key.equals(PARSE_COM_DATA)) { // promote each value to root anyways
+              Iterator<String> jsonIter = data.keys();
+              while (jsonIter.hasNext()) {
+                String jsonKey = jsonIter.next();
+
+                Log.d(LOG_TAG, "key = data/" + jsonKey);
+
+                String value = data.getString(jsonKey);
+                jsonKey = normalizeKey(jsonKey, messageKey, titleKey, newExtras);
+                value = localizeKey(context, jsonKey, value);
+
+                newExtras.putString(jsonKey, value);
+              }
             }
           } catch (JSONException e) {
             Log.e(LOG_TAG, "normalizeExtras: JSON exception");
