@@ -184,7 +184,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
   ) {
     Log.v(LOG_TAG, "execute: action=" + action);
     gWebView = this.webView;
-
+    Activity activity = this.cordova.getActivity();
     if (INITIALIZE.equals(action)) {
       cordova.getThreadPool().execute(new Runnable() {
         public void run () {
