@@ -231,6 +231,12 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
               Log.v(LOG_TAG, "onRegistered: " + json.toString());
 
+              Bundle pnData = activity.getIntent().getExtras();
+              if (pnData != null && pnData.containsKey("google.message_id")) {
+                pnData.putBoolean("tap", true);
+                PushPlugin.sendExtras(pnData);
+              }
+
               JSONArray topics = jo.optJSONArray(TOPICS);
               subscribeToTopics(topics, registration_id);
 
