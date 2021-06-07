@@ -52,11 +52,7 @@
   },
   "types": "./types/index.d.ts",
   "cordova": {
-<<<<<<< HEAD
     "id": "veoci-cordova-plugin-push",
-=======
-    "id": "@havesource/cordova-plugin-push",
->>>>>>> fbb45e9aa1e2fef9032669dc13abe19b0ca34fd8
     "platforms": [
       "ios",
       "android",
