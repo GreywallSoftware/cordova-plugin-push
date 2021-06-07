@@ -58,6 +58,14 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
     return this.cordova.getActivity().getApplicationContext();
   }
 
+  private String getAppName () {
+    return (String) this.cordova.getActivity()
+      .getPackageManager()
+      .getApplicationLabel(
+        this.cordova.getActivity().getApplicationInfo()
+      );
+  }
+
   @TargetApi(26)
   private JSONArray listChannels () throws JSONException {
     JSONArray channels = new JSONArray();
@@ -94,9 +102,10 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
         .getSystemService(Context.NOTIFICATION_SERVICE);
 
       String packageName = getApplicationContext().getPackageName();
+      String appName = this.getAppName();
       NotificationChannel mChannel = new NotificationChannel(
         channel.getString(CHANNEL_ID),
-        channel.optString(CHANNEL_DESCRIPTION, ""),
+        channel.optString(CHANNEL_DESCRIPTION, appName),
         channel.optInt(CHANNEL_IMPORTANCE, NotificationManager.IMPORTANCE_DEFAULT)
       );
 
@@ -168,7 +177,8 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
       }
       try {
         options.put(CHANNEL_ID, DEFAULT_CHANNEL_ID);
-        options.putOpt(CHANNEL_DESCRIPTION, "PhoneGap PushPlugin");
+        String appName = this.getAppName();
+        options.putOpt(CHANNEL_DESCRIPTION, appName);
         createChannel(options);
       } catch (JSONException e) {
         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
@@ -583,8 +593,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
   private void clearNotification (int id) {
     final NotificationManager notificationManager = (NotificationManager) cordova.getActivity()
       .getSystemService(Context.NOTIFICATION_SERVICE);
-    String appName = (String) this.cordova.getActivity().getPackageManager()
-      .getApplicationLabel(this.cordova.getActivity().getApplicationInfo());
+    String appName = this.getAppName();
     notificationManager.cancel(appName, id);
   }
 
